@@ -1,0 +1,98 @@
+# Prometheus Configuration for Docqet Infrastructure
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Docqet Backend API
+  - job_name: 'docqet-backend'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['backend:8000']
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # Docqet Frontend (if exposing metrics)
+  - job_name: 'docqet-frontend'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['frontend:3000']
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+  # PostgreSQL Database
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+    scrape_interval: 30s
+
+  # Redis Cache
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 30s
+
+  # Node Exporter (ECS instances)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 30s
+
+  # ECS Service Discovery
+  - job_name: 'ecs-services'
+    ec2_sd_configs:
+      - region: us-east-1
+        port: 9100
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_Name]
+        regex: '.*docqet.*'
+        action: keep
+      - source_labels: [__meta_ec2_instance_id]
+        target_label: instance
+
+  # Application Load Balancer
+  - job_name: 'alb'
+    static_configs:
+      - targets: ['alb-exporter:9113']
+    scrape_interval: 30s
+
+  # CloudWatch Metrics (via cloudwatch-exporter)
+  - job_name: 'cloudwatch'
+    static_configs:
+      - targets: ['cloudwatch-exporter:9106']
+    scrape_interval: 60s
+
+  # Custom Application Metrics
+  - job_name: 'docqet-custom-metrics'
+    static_configs:
+      - targets: ['backend:8000']
+    metrics_path: '/custom-metrics'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+
+  # Health Checks
+  - job_name: 'health-checks'
+    static_configs:
+      - targets: 
+        - 'backend:8000'
+        - 'frontend:3000'
+        - 'postgres:5432'
+        - 'redis:6379'
+    metrics_path: '/health'
+    scrape_interval: 30s
+    scrape_timeout: 5s 

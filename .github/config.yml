@@ -1,0 +1,67 @@
+# GitHub repository configuration
+repository:
+  # Repository settings
+  has_issues: true
+  has_wiki: true
+  has_projects: true
+  has_downloads: true
+  
+  # Default branch
+  default_branch: main
+  
+  # Topics
+  topics:
+    - document-management
+    - ai
+    - fastapi
+    - nextjs
+    - typescript
+    - python
+    - postgresql
+    - redis
+    - vector-search
+    - open-source
+    - security
+    - collaboration
+
+# Issue and PR templates
+issue_template:
+  - name: Bug Report
+    about: Report a bug
+    title: "[BUG] "
+    labels: ["bug"]
+    body: |
+      **Describe the bug**
+      A clear and concise description of what the bug is.
+
+      **To Reproduce**
+      Steps to reproduce the behavior:
+      1. Go to '...'
+      2. Click on '....'
+      3. Scroll down to '....'
+      4. See error
+
+      **Expected behavior**
+      A clear and concise description of what you expected to happen.
+
+      **Environment:**
+      - OS: [e.g. macOS, Windows, Linux]
+      - Browser: [e.g. chrome, safari, firefox]
+      - Version: [e.g. 22]
+
+      **Additional context**
+      Add any other context about the problem here.
+
+  - name: Feature Request
+    about: Suggest an idea for this project
+    title: "[FEATURE] "
+    labels: ["enhancement"]
+    body: |
+      **Is your feature request related to a problem? Please describe.**
+      A clear and concise description of what the problem is.
+
+      **Describe the solution you'd like**
+      A clear and concise description of what you want to happen.
+
+      **Additional context**
+      Add any other context or screenshots about the feature request here. 

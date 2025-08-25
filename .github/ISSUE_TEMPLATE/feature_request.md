@@ -17,3 +17,8 @@ A clear and concise description of any alternative solutions or features you've 
 
 **Additional context**
 Add any other context or screenshots about the feature request here.
+
+**Checklist:**
+- [ ] I have searched existing issues for duplicates
+- [ ] This feature aligns with the project's goals
+- [ ] I can provide additional context if needed
