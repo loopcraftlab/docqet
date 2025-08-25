@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Test PostgreSQL Database
+  postgres-test:
+    image: postgres:14-alpine
+    container_name: docqet-postgres-test
+    environment:
+      POSTGRES_DB: docqet_test
+      POSTGRES_USER: docqet
+      POSTGRES_PASSWORD: docqet_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    networks:
+      - docqet-test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docqet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Test Redis Cache
+  redis-test:
+    image: redis:7-alpine
+    container_name: docqet-redis-test
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_test_data:/data
+    networks:
+      - docqet-test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Test Qdrant Vector Database
+  qdrant-test:
+    image: qdrant/qdrant:latest
+    container_name: docqet-qdrant-test
+    ports:
+      - "6334:6333"
+      - "6335:6334"
+    volumes:
+      - qdrant_test_data:/qdrant/storage
+    networks:
+      - docqet-test-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_test_data:
+    driver: local
+  redis_test_data:
+    driver: local
+  qdrant_test_data:
+    driver: local
+
+networks:
+  docqet-test-network:
+    driver: bridge 
