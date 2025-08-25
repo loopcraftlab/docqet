@@ -1,0 +1,303 @@
+name: Issue Templates Management
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run monthly to ensure templates are up to date
+    - cron: '0 0 1 * *'
+  push:
+    branches: [ main ]
+    paths:
+      - '.github/ISSUE_TEMPLATE/**'
+
+jobs:
+  setup-issue-templates:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Setup GitHub CLI
+      uses: cli/setup-gh@v2
+    
+    - name: Create issue templates
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Create bug report template
+        cat > .github/ISSUE_TEMPLATE/bug_report.md << 'EOF'
+        ---
+        name: Bug report
+        about: Create a report to help us improve
+        title: '[BUG] '
+        labels: ['bug']
+        assignees: ''
+        ---
+
+        **Describe the bug**
+        A clear and concise description of what the bug is.
+
+        **To Reproduce**
+        Steps to reproduce the behavior:
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+
+        **Expected behavior**
+        A clear and concise description of what you expected to happen.
+
+        **Screenshots**
+        If applicable, add screenshots to help explain your problem.
+
+        **Environment:**
+        - OS: [e.g. macOS, Windows, Linux]
+        - Browser: [e.g. chrome, safari, firefox]
+        - Version: [e.g. 22]
+        - Docqet Version: [e.g. 1.0.0]
+
+        **Additional context**
+        Add any other context about the problem here.
+
+        **Checklist:**
+        - [ ] I have searched existing issues for duplicates
+        - [ ] I have provided all required information
+        - [ ] I can reproduce this issue consistently
+        EOF
+
+        # Create feature request template
+        cat > .github/ISSUE_TEMPLATE/feature_request.md << 'EOF'
+        ---
+        name: Feature request
+        about: Suggest an idea for this project
+        title: '[FEATURE] '
+        labels: ['enhancement']
+        assignees: ''
+        ---
+
+        **Is your feature request related to a problem? Please describe.**
+        A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+
+        **Describe the solution you'd like**
+        A clear and concise description of what you want to happen.
+
+        **Describe alternatives you've considered**
+        A clear and concise description of any alternative solutions or features you've considered.
+
+        **Additional context**
+        Add any other context or screenshots about the feature request here.
+
+        **Checklist:**
+        - [ ] I have searched existing issues for duplicates
+        - [ ] This feature aligns with the project's goals
+        - [ ] I can provide additional context if needed
+        EOF
+
+        # Create documentation request template
+        cat > .github/ISSUE_TEMPLATE/documentation_request.md << 'EOF'
+        ---
+        name: Documentation request
+        about: Request documentation improvements or additions
+        title: '[DOCS] '
+        labels: ['documentation']
+        assignees: ''
+        ---
+
+        **What documentation is missing or needs improvement?**
+        A clear description of what documentation you'd like to see added or improved.
+
+        **Where should this documentation be located?**
+        - [ ] README.md
+        - [ ] API documentation
+        - [ ] User guide
+        - [ ] Developer guide
+        - [ ] Other (please specify)
+
+        **What is the target audience?**
+        - [ ] End users
+        - [ ] Developers
+        - [ ] System administrators
+        - [ ] Other (please specify)
+
+        **Additional context**
+        Add any other context about the documentation request here.
+
+        **Checklist:**
+        - [ ] I have searched existing documentation
+        - [ ] This documentation would be valuable to users
+        - [ ] I can provide additional context if needed
+        EOF
+
+        # Create security issue template
+        cat > .github/ISSUE_TEMPLATE/security_issue.md << 'EOF'
+        ---
+        name: Security issue
+        about: Report a security vulnerability
+        title: '[SECURITY] '
+        labels: ['security']
+        assignees: ''
+        ---
+
+        **Describe the security issue**
+        A clear and concise description of the security vulnerability.
+
+        **Severity**
+        - [ ] Critical (immediate action required)
+        - [ ] High (action required within 24 hours)
+        - [ ] Medium (action required within 1 week)
+        - [ ] Low (action required within 1 month)
+
+        **Steps to reproduce**
+        Detailed steps to reproduce the vulnerability:
+        1. Go to '...'
+        2. Click on '....'
+        3. See vulnerability
+
+        **Expected behavior**
+        What should happen instead.
+
+        **Environment:**
+        - OS: [e.g. macOS, Windows, Linux]
+        - Browser: [e.g. chrome, safari, firefox]
+        - Version: [e.g. 22]
+        - Docqet Version: [e.g. 1.0.0]
+
+        **Additional context**
+        Add any other context about the security issue here.
+
+        **Responsible disclosure**
+        - [ ] I will not disclose this issue publicly until it's fixed
+        - [ ] I understand the security implications
+        EOF
+
+        # Create performance issue template
+        cat > .github/ISSUE_TEMPLATE/performance_issue.md << 'EOF'
+        ---
+        name: Performance issue
+        about: Report performance problems or optimization requests
+        title: '[PERFORMANCE] '
+        labels: ['performance']
+        assignees: ''
+        ---
+
+        **Describe the performance issue**
+        A clear and concise description of the performance problem.
+
+        **Current performance**
+        - Response time: [e.g. 5 seconds]
+        - Memory usage: [e.g. 500MB]
+        - CPU usage: [e.g. 80%]
+        - Database queries: [e.g. 100 queries per request]
+
+        **Expected performance**
+        - Response time: [e.g. 1 second]
+        - Memory usage: [e.g. 100MB]
+        - CPU usage: [e.g. 20%]
+        - Database queries: [e.g. 10 queries per request]
+
+        **Steps to reproduce**
+        1. Go to '...'
+        2. Click on '....'
+        3. Observe slow performance
+
+        **Environment:**
+        - OS: [e.g. macOS, Windows, Linux]
+        - Browser: [e.g. chrome, safari, firefox]
+        - Version: [e.g. 22]
+        - Docqet Version: [e.g. 1.0.0]
+        - Hardware: [e.g. 8GB RAM, 4 cores]
+
+        **Additional context**
+        Add any other context about the performance issue here.
+
+        **Checklist:**
+        - [ ] I have measured the performance impact
+        - [ ] This affects user experience
+        - [ ] I can provide performance metrics
+        EOF
+
+        # Create AI/ML feature request template
+        cat > .github/ISSUE_TEMPLATE/ai_feature_request.md << 'EOF'
+        ---
+        name: AI/ML Feature Request
+        about: Request AI/ML related features or improvements
+        title: '[AI] '
+        labels: ['ai', 'enhancement']
+        assignees: ''
+        ---
+
+        **Describe the AI/ML feature**
+        A clear and concise description of the AI/ML feature you'd like to see.
+
+        **Use case**
+        Describe the specific use case or problem this AI/ML feature would solve.
+
+        **Technical requirements**
+        - Model type: [e.g. LLM, embedding, classification]
+        - Input data: [e.g. text, images, documents]
+        - Output format: [e.g. text, structured data, recommendations]
+        - Performance requirements: [e.g. response time, accuracy]
+
+        **Integration points**
+        - [ ] Document analysis
+        - [ ] Content summarization
+        - [ ] Search and retrieval
+        - [ ] User recommendations
+        - [ ] Other (please specify)
+
+        **Additional context**
+        Add any other context about the AI/ML feature request here.
+
+        **Checklist:**
+        - [ ] This feature aligns with Docqet's AI capabilities
+        - [ ] I can provide use case examples
+        - [ ] I understand the technical requirements
+        EOF
+
+        # Create config.yml for issue template chooser
+        cat > .github/ISSUE_TEMPLATE/config.yml << 'EOF'
+        blank_issues_enabled: false
+        contact_links:
+          - name: GitHub Community Support
+            url: https://github.com/loopcraftlab/docqet/discussions
+            about: Please ask and answer questions here.
+          - name: Documentation
+            url: https://github.com/loopcraftlab/docqet/tree/main/docs
+            about: Check our documentation for guides and tutorials.
+        EOF
+
+    - name: Commit and push templates
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .github/ISSUE_TEMPLATE/
+        git commit -m "Update issue templates" || echo "No changes to commit"
+        git push || echo "No changes to push"
+
+  validate-templates:
+    runs-on: ubuntu-latest
+    needs: setup-issue-templates
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Validate YAML syntax
+      run: |
+        # Validate config.yml
+        python -c "import yaml; yaml.safe_load(open('.github/ISSUE_TEMPLATE/config.yml'))"
+        
+        # Validate all markdown templates
+        for file in .github/ISSUE_TEMPLATE/*.md; do
+          if [ -f "$file" ]; then
+            echo "Validating $file..."
+            # Check for proper frontmatter
+            if ! grep -q "^---$" "$file"; then
+              echo "Error: $file missing frontmatter"
+              exit 1
+            fi
+          fi
+        done
+        
+        echo "All templates validated successfully!" 

@@ -75,34 +75,34 @@ create_fields() {
     
     # Status field
     print_status "Creating Status field..."
-    gh project field-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project field-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Status" \
         --data-type SINGLE_SELECT \
         --single-select-options "Todo,In progress,Blocked,In review,Done"
     
     # Priority field
     print_status "Creating Priority field..."
-    gh project field-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project field-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Priority" \
         --data-type SINGLE_SELECT \
         --single-select-options "P0,P1,P2"
     
     # Area field
     print_status "Creating Area field..."
-    gh project field-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project field-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Area" \
         --data-type SINGLE_SELECT \
         --single-select-options "Backend,Frontend,AI,DevOps,Docs"
     
     # Start date field
     print_status "Creating Start date field..."
-    gh project field-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project field-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Start date" \
         --data-type DATE
     
     # Target date field
     print_status "Creating Target date field..."
-    gh project field-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project field-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Target date" \
         --data-type DATE
     
@@ -121,7 +121,7 @@ add_repository() {
     PROJECT_NUMBER=$(cat .github/project-number.txt)
     
     # Add the repository
-    gh project item-add --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project item-add "$PROJECT_NUMBER" --owner loopcraftlab \
         --repo loopcraftlab/docqet
     
     print_success "Repository added to project"
@@ -144,7 +144,7 @@ add_issues() {
     if [ -n "$ISSUES" ]; then
         for ISSUE_NUMBER in $ISSUES; do
             print_status "Adding issue #$ISSUE_NUMBER to project..."
-            gh project item-add --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+            gh project item-add "$PROJECT_NUMBER" --owner loopcraftlab \
                 --issue-number "$ISSUE_NUMBER" \
                 --repo loopcraftlab/docqet
         done
@@ -167,19 +167,19 @@ create_views() {
     
     # Board view
     print_status "Creating Board view..."
-    gh project view-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project view-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Board" \
         --layout BOARD
     
     # Table view
     print_status "Creating Table view..."
-    gh project view-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project view-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Table" \
         --layout TABLE
     
     # Roadmap view
     print_status "Creating Roadmap view..."
-    gh project view-create --owner loopcraftlab --project-number "$PROJECT_NUMBER" \
+    gh project view-create "$PROJECT_NUMBER" --owner loopcraftlab \
         --name "Roadmap" \
         --layout ROADMAP
     
