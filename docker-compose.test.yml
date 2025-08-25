@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Test PostgreSQL Database
   postgres-test:
@@ -42,8 +40,8 @@ services:
     image: qdrant/qdrant:latest
     container_name: docqet-qdrant-test
     ports:
-      - "6334:6333"
-      - "6335:6334"
+      - "6336:6333"
+      - "6337:6334"
     volumes:
       - qdrant_test_data:/qdrant/storage
     networks:

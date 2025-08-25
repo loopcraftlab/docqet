@@ -5,6 +5,7 @@ Tests for main FastAPI application
 import pytest
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi.testclient import TestClient
@@ -74,4 +75,4 @@ def test_ai_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert data["story"] == "1.4: Core AI Integration Setup"
-    assert data["status"] == "pending" 
+    assert data["status"] == "pending"

@@ -1,7 +1,7 @@
 # Docqet Development Makefile
 # Story 1.1: Project Setup and Development Environment
 
-.PHONY: help dev dev-frontend dev-backend dev-db test test-frontend test-backend test-integration clean install install-frontend install-backend setup-db migrate logs stop
+.PHONY: help dev dev-frontend dev-backend dev-db test test-frontend test-backend test-integration clean install install-frontend install-backend setup-db migrate logs stop ci lint-backend lint-frontend
 
 # Default target
 help:
@@ -20,6 +20,9 @@ help:
 	@echo "  make test-frontend    - Run frontend tests"
 	@echo "  make test-backend     - Run backend tests"
 	@echo "  make test-integration - Run integration tests"
+	@echo "  make ci               - Run all CI checks (linting + tests)"
+	@echo "  make lint-backend     - Run backend linting"
+	@echo "  make lint-frontend    - Run frontend linting"
 	@echo "  make logs             - Show service logs"
 	@echo "  make stop             - Stop all services"
 	@echo "  make clean            - Clean up containers and volumes"
@@ -94,6 +97,25 @@ migrate:
 # Run all tests
 test: test-frontend test-backend test-integration
 	@echo "✅ All tests completed!"
+
+# Run CI checks (linting, formatting, tests)
+ci: lint-backend lint-frontend test
+	@echo "✅ All CI checks completed!"
+
+# Run backend linting
+lint-backend:
+	@echo "🔍 Running backend linting..."
+	cd backend && black --check .
+	cd backend && flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127
+	cd backend && python3 -m mypy --ignore-missing-imports --exclude=alembic --exclude=tests app/
+	@echo "✅ Backend linting completed!"
+
+# Run frontend linting
+lint-frontend:
+	@echo "🔍 Running frontend linting..."
+	cd frontend && npm run lint
+	cd frontend && npm run type-check
+	@echo "✅ Frontend linting completed!"
 
 # Run frontend tests
 test-frontend:

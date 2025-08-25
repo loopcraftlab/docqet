@@ -39,7 +39,7 @@ redis_client: Optional[redis.Redis] = None
 async def init_db():
     """Initialize database connections"""
     global redis_client
-    
+
     try:
         # Initialize Redis connection
         redis_client = redis.from_url(
@@ -49,16 +49,16 @@ async def init_db():
             socket_connect_timeout=5,
             socket_timeout=5,
         )
-        
+
         # Test Redis connection
         await redis_client.ping()
         logger.info("Redis connection established")
-        
+
         # Test PostgreSQL connection
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         logger.info("PostgreSQL connection established")
-        
+
     except Exception as e:
         logger.error("Database initialization failed", error=str(e))
         raise
@@ -83,10 +83,10 @@ def get_db():
 async def close_db():
     """Close database connections"""
     global redis_client
-    
+
     if redis_client:
         await redis_client.close()
         logger.info("Redis connection closed")
-    
+
     engine.dispose()
-    logger.info("PostgreSQL connection closed") 
+    logger.info("PostgreSQL connection closed")

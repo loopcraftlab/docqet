@@ -14,5 +14,5 @@ async def auth_info():
     return {
         "message": "Authentication endpoints will be implemented in Story 1.2",
         "story": "1.2: User Authentication and Authorization",
-        "status": "pending"
-    } 
+        "status": "pending",
+    }

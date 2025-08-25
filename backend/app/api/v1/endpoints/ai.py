@@ -14,5 +14,5 @@ async def ai_info():
     return {
         "message": "AI service endpoints will be implemented in Story 1.4",
         "story": "1.4: Core AI Integration Setup",
-        "status": "pending"
-    } 
+        "status": "pending",
+    }

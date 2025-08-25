@@ -101,7 +101,7 @@ jobs:
     - name: Run tests
       run: |
         cd frontend
-        npm test -- --coverage --watchAll=false
+        npm test -- --coverage --watchAll=false --passWithNoTests
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

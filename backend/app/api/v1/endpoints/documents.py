@@ -14,5 +14,5 @@ async def documents_info():
     return {
         "message": "Document management endpoints will be implemented in Story 1.3",
         "story": "1.3: Basic Document Upload and Storage",
-        "status": "pending"
-    } 
+        "status": "pending",
+    }

@@ -4,6 +4,7 @@ Health check endpoints
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 import structlog
 
 from app.core.database import get_db, get_redis
@@ -20,7 +21,7 @@ async def health_check():
         "status": "healthy",
         "service": "docqet-api",
         "version": settings.VERSION,
-        "environment": settings.ENVIRONMENT
+        "environment": settings.ENVIRONMENT,
     }
 
 
@@ -29,12 +30,12 @@ async def detailed_health_check(db: Session = Depends(get_db)):
     """Detailed health check with database connectivity"""
     try:
         # Test database connection
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db_status = "healthy"
     except Exception as e:
         logger.error("Database health check failed", error=str(e))
         db_status = "unhealthy"
-    
+
     try:
         # Test Redis connection
         redis_client = await get_redis()
@@ -43,17 +44,17 @@ async def detailed_health_check(db: Session = Depends(get_db)):
     except Exception as e:
         logger.error("Redis health check failed", error=str(e))
         redis_status = "unhealthy"
-    
-    overall_status = "healthy" if db_status == "healthy" and redis_status == "healthy" else "unhealthy"
-    
+
+    overall_status = (
+        "healthy"
+        if db_status == "healthy" and redis_status == "healthy"
+        else "unhealthy"
+    )
+
     return {
         "status": overall_status,
         "service": "docqet-api",
         "version": settings.VERSION,
         "environment": settings.ENVIRONMENT,
-        "components": {
-            "database": db_status,
-            "redis": redis_status,
-            "api": "healthy"
-        }
-    } 
+        "components": {"database": db_status, "redis": redis_status, "api": "healthy"},
+    }

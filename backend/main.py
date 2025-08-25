@@ -25,7 +25,7 @@ structlog.configure(
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
-        structlog.processors.JSONRenderer()
+        structlog.processors.JSONRenderer(),
     ],
     context_class=dict,
     logger_factory=structlog.stdlib.LoggerFactory(),
@@ -35,6 +35,7 @@ structlog.configure(
 
 logger = structlog.get_logger()
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
@@ -42,15 +43,16 @@ async def lifespan(app: FastAPI):
     logger.info("Starting Docqet Backend API")
     await init_db()
     logger.info("Database initialized successfully")
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down Docqet Backend API")
 
+
 def create_application() -> FastAPI:
     """Create and configure FastAPI application"""
-    
+
     app = FastAPI(
         title="Docqet API",
         description="Secure Document Sharing with AI - Backend API",
@@ -58,15 +60,12 @@ def create_application() -> FastAPI:
         docs_url="/docs" if settings.ENVIRONMENT != "production" else None,
         redoc_url="/redoc" if settings.ENVIRONMENT != "production" else None,
         openapi_url="/openapi.json" if settings.ENVIRONMENT != "production" else None,
-        lifespan=lifespan
+        lifespan=lifespan,
     )
-    
+
     # Security middleware
-    app.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=settings.ALLOWED_HOSTS
-    )
-    
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
+
     # CORS middleware
     app.add_middleware(
         CORSMiddleware,
@@ -75,13 +74,15 @@ def create_application() -> FastAPI:
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
-    
+
     # Include API router
     app.include_router(api_router, prefix="/api/v1")
-    
+
     return app
 
+
 app = create_application()
+
 
 @app.get("/")
 async def root():
@@ -90,8 +91,9 @@ async def root():
         "message": "Welcome to Docqet API",
         "version": "0.1.0",
         "status": "running",
-        "environment": settings.ENVIRONMENT
+        "environment": settings.ENVIRONMENT,
     }
+
 
 @app.get("/health")
 async def health_check():
@@ -99,14 +101,16 @@ async def health_check():
     try:
         # Add database health check here when implemented
         from datetime import datetime
+
         return {
             "status": "healthy",
             "timestamp": datetime.utcnow().isoformat(),
-            "version": "0.1.0"
+            "version": "0.1.0",
         }
     except Exception as e:
         logger.error("Health check failed", error=str(e))
         raise HTTPException(status_code=503, detail="Service unhealthy")
+
 
 @app.get("/ready")
 async def readiness_check():
@@ -114,18 +118,20 @@ async def readiness_check():
     try:
         # Add more comprehensive checks here
         from datetime import datetime
+
         return {
             "status": "ready",
             "timestamp": datetime.utcnow().isoformat(),
             "services": {
                 "api": "ready",
                 "database": "ready",  # Will be updated when DB is implemented
-                "redis": "ready"      # Will be updated when Redis is implemented
-            }
+                "redis": "ready",  # Will be updated when Redis is implemented
+            },
         }
     except Exception as e:
         logger.error("Readiness check failed", error=str(e))
         raise HTTPException(status_code=503, detail="Service not ready")
+
 
 if __name__ == "__main__":
     uvicorn.run(
@@ -133,5 +139,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         reload=settings.ENVIRONMENT == "development",
-        log_level="info"
-    ) 
+        log_level="info",
+    )
