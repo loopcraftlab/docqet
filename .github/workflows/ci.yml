@@ -166,7 +166,7 @@ jobs:
     
     - name: Run integration tests
       run: |
-        cd tests/integration
+        cd backend/tests/integration
         pytest -v
 
   security-scan:
