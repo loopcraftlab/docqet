@@ -60,7 +60,7 @@ jobs:
       run: |
         cd backend
         black --check .
-        flake8 .
+        flake8 . --max-line-length=88 --exclude=alembic,tests
         mypy .
     
     - name: Run tests

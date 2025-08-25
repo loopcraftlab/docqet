@@ -106,7 +106,7 @@ ci: lint-backend lint-frontend test
 lint-backend:
 	@echo "🔍 Running backend linting..."
 	cd backend && black --check .
-	cd backend && flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127
+	cd backend && flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --exclude=alembic,tests
 	cd backend && python3 -m mypy --ignore-missing-imports --exclude=alembic --exclude=tests app/
 	@echo "✅ Backend linting completed!"
 

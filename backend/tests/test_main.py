@@ -2,7 +2,6 @@
 Tests for main FastAPI application
 """
 
-import pytest
 import sys
 import os
 

@@ -2,7 +2,6 @@
 Basic integration tests for Story 1.1
 """
 
-import pytest
 import sys
 import os
 
